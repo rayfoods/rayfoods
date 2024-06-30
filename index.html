@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rayfoods - Cattle Food</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Rayfoods</h1>
+        <img src="images/logo.png" alt="Rayfoods Logo" class="logo">
+    </header>
+    <section>
+        <h2>Our Products</h2>
+        <div class="product-container">
+            <div class="product">
+                <img src="images/product1.jpg" alt="25KG BAG">
+                <h3>25KG BAG</h3>
+                <button onclick="showOrderForm('25KG BAG')">Buy</button>
+            </div>
+            <div class="product">
+                <img src="images/product2.jpg" alt="50KG BAG">
+                <h3>50KG BAG</h3>
+                <button onclick="showOrderForm('50KG BAG')">Buy</button>
+            </div>
+        </div>
+    </section>
+    <section id="orderForm" style="display:none;">
+        <h2>Order Form</h2>
+        <form id="orderFormElement">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="product">Product:</label>
+            <input type="text" id="product" name="product" required readonly>
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" min="1" max="9999" required>
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+    <section id="orderSlip" style="display:none;">
+        <h2>Order Slip</h2>
+        <p id="slipDetails"></p>
+    </section>
+    <script src="script.js"></script>
+</body>
+</html>
