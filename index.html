@@ -3,46 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rayfoods - Cattle Food</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <title>Ray Foods</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+        }
+        header img {
+            width: 150px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .products {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .product {
+            margin: 20px;
+            text-align: center;
+        }
+        .product img {
+            width: 200px;
+            height: auto;
+        }
+        .order-form {
+            margin-top: 30px;
+        }
+        .order-form input, .order-form select {
+            padding: 10px;
+            margin: 10px 0;
+            width: calc(100% - 22px);
+        }
+        .order-form button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .order-form button:hover {
+            background-color: #555;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>Welcome to Rayfoods</h1>
-        <img src="images/logo.png" alt="Rayfoods Logo" class="logo">
+        <img src="img/logo.png" alt="Ray Foods Logo">
     </header>
-    <section>
-        <h2>Our Products</h2>
-        <div class="product-container">
+    <div class="container">
+        <h1>Welcome to Ray Foods</h1>
+        <p>Quality cattle food for your farm.</p>
+        <div class="products">
             <div class="product">
-                <img src="images/product1.jpg" alt="25KG BAG">
+                <img src="img/product1.jpg" alt="25KG BAG">
                 <h3>25KG BAG</h3>
-                <button onclick="showOrderForm('25KG BAG')">Buy</button>
             </div>
             <div class="product">
-                <img src="images/product2.jpg" alt="50KG BAG">
+                <img src="img/product2.jpg" alt="50KG BAG">
                 <h3>50KG BAG</h3>
-                <button onclick="showOrderForm('50KG BAG')">Buy</button>
             </div>
         </div>
-    </section>
-    <section id="orderForm" style="display:none;">
-        <h2>Order Form</h2>
-        <form id="orderFormElement">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-            <label for="product">Product:</label>
-            <input type="text" id="product" name="product" required readonly>
-            <label for="quantity">Quantity:</label>
-            <input type="number" id="quantity" name="quantity" min="1" max="9999" required>
-            <button type="submit">Submit</button>
-        </form>
-    </section>
-    <section id="orderSlip" style="display:none;">
-        <h2>Order Slip</h2>
-        <p id="slipDetails"></p>
-    </section>
-    <script src="script.js"></script>
+        <div class="order-form">
+            <h2>Order Form</h2>
+            <form id="orderForm">
+                <input type="text" id="name" name="name" placeholder="Your Name" required>
+                <input type="email" id="email" name="email" placeholder="Your Email" required>
+                <input type="tel" id="phone" name="phone" placeholder="Your Phone Number" required>
+                <select id="product" name="product" required>
+                    <option value="">Select Product</option>
+                    <option value="25KG BAG">25KG BAG</option>
+                    <option value="50KG BAG">50KG BAG</option>
+                </select>
+                <input type="number" id="quantity" name="quantity" placeholder="Quantity" min="1" max="9999" required>
+                <button type="submit">Place Order</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.getElementById('orderForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const product = document.getElementById('product').value;
+            const quantity = document.getElementById('quantity').value;
+            const orderNumber = 100000000000 - Math.floor(Math.random() * 100000);
+            const date = new Date().toLocaleString();
+            const slip = `
+                <div style="width: 500px; margin: auto; padding: 20px; border: 1px solid #333; text-align: center; background: url('img/logo.png') no-repeat center center; background-size: 500px; opacity: 0.2;">
+                    <h1 style="font-size: 50px; color: #333;">Order Slip</h1>
+                    <p style="font-size: 24px; color: #333;">Order Number: ${orderNumber}</p>
+                    <p style="font-size: 24px; color: #333;">Date: ${date}</p>
+                    <p style="font-size: 24px; color: #333;">Name: ${name}</p>
+                    <p style="font-size: 24px; color: #333;">Email: ${email}</p>
+                    <p style="font-size: 24px; color: #333;">Phone: ${phone}</p>
+                    <p style="font-size: 24px; color: #333;">Product: ${product}</p>
+                    <p style="font-size: 24px; color: #333;">Quantity: ${quantity}</p>
+                </div>
+            `;
+            const newWindow = window.open('', '', 'width=600,height=400');
+            newWindow.document.write(slip);
+            newWindow.document.close();
+            newWindow.print();
+        });
+    </script>
 </body>
 </html>
