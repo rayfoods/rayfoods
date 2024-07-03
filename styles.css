@@ -3,6 +3,8 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    text-align: center;
+    background-color: #f4f4f4;
 }
 
 header {
@@ -12,8 +14,8 @@ header {
 }
 
 header img.logo {
-    width: 150px;  /* Adjust the width as needed */
-    height: auto;  /* Maintain the aspect ratio */
+    width: 150px;
+    height: auto;
 }
 
 section {
@@ -24,7 +26,7 @@ section {
     display: flex;
     justify-content: center;
     gap: 20px;
-    flex-wrap: wrap; /* Allows products to wrap to the next line if there's not enough space */
+    flex-wrap: wrap;
 }
 
 .product {
@@ -32,7 +34,7 @@ section {
     padding: 10px;
     margin-bottom: 10px;
     text-align: center;
-    width: 200px; /* Adjust width as needed */
+    width: 200px;
 }
 
 .product img {
