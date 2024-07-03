@@ -119,6 +119,16 @@
             newWindow.document.write(slip);
             newWindow.document.close();
             newWindow.print();
+            
+            // Send data to Google Sheets
+            fetch('https://script.google.com/macros/s/AKfycbzHbxwH-cFzq787nVe5xbvh2N5RTIwH_UcBYH82pxEn3vrpdDs2AdwTGcacj1CsdCFO/exec', {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, phone, product, quantity, orderNumber, date })
+            });
         });
     </script>
 </body>
