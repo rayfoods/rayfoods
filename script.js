@@ -7,48 +7,58 @@ function showOrderForm(productName) {
 
 document.getElementById('orderForm').addEventListener('submit', function(event) {
     event.preventDefault();
-
+    
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
     const product = document.getElementById('product').value;
     const quantity = document.getElementById('quantity').value;
-
-    // Validate form fields
-    if (!name || !phone || !product || !quantity) {
-        alert('Please fill in all fields.');
-        return;
-    }
-
+    
+    // Google Sheets URL and Sheet Name
+    const scriptURL = 'YOUR_GOOGLE_APPS_SCRIPT_URL';
+    const sheetName = 'Sheet1'; // Replace with your sheet name
+    
     // Decrease the order number for each new order
     orderNumber--;
 
-    // Prepare data to send to Google Sheets
+    // Get the current date and time
+    const now = new Date();
+    const currentDate = now.toLocaleDateString();
+    const currentTime = now.toLocaleTimeString();
+
+    // Prepare data to be sent to Google Sheets
     const formData = new FormData();
     formData.append('name', name);
     formData.append('phone', phone);
     formData.append('product', product);
     formData.append('quantity', quantity);
     formData.append('orderNumber', orderNumber);
+    formData.append('date', currentDate);
+    formData.append('time', currentTime);
 
-    // Send data to Google Sheets via Google Apps Script web app
-    const scriptURL = 'YOUR_GOOGLE_APPS_SCRIPT_URL'; // Replace with your Google Apps Script URL
-    fetch(scriptURL, { method: 'POST', body: formData })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Success:', data);
+    // Send data to Google Sheets via Google Apps Script
+    fetch(scriptURL, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        // Display success message
+        if (response.status === 200) {
             alert('Order submitted successfully!');
             document.getElementById('orderForm').style.display = 'none';
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('There was an issue submitting your order. Please try again later.');
-        });
-
-    // Optionally, reset the form after submission
-    document.getElementById('orderForm').reset();
+            document.getElementById('orderSlip').style.display = 'block';
+            const orderSlipDetails = `
+                Order Number: ${orderNumber}<br>
+                Name: ${name}<br>
+                Phone: ${phone}<br>
+                Product: ${product}<br>
+                Quantity: ${quantity}<br>
+                Date: ${currentDate}<br>
+                Time: ${currentTime}
+            `;
+            document.getElementById('slipDetails').innerHTML = orderSlipDetails;
+        } else {
+            alert('Error submitting order. Please try again later.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
 });
