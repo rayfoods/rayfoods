@@ -59,6 +59,15 @@
         .order-form button:hover {
             background-color: #555;
         }
+        #orderSlip {
+            background: #f9f9f9;
+            padding: 20px;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+        }
+        #slipDetails {
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
@@ -98,7 +107,7 @@
         </div>
     </div>
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxrsJWaajjri_nmFEwbX2WzVh1u9yEr4o9r61u-wsNVPXYNisSAgLifU_yHCsQIrF_K1A/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyX0b4CREGl24PGEy-DkcdfqreDHEUIyvIt4lotwkY8yfsb_MXvhHZLclhIBn0fIavURw/exec';
 
         let orderNumber = 100000000000;
 
@@ -138,6 +147,7 @@
             const slipDetails = `
                 Order Number: ${orderNumber}<br>
                 Name: ${name}<br>
+                Phone: ${phone}<br>
                 Product: ${product}<br>
                 Quantity: ${quantity}<br>
                 Date: ${currentDate}<br>
@@ -167,4 +177,3 @@
     </script>
 </body>
 </html>
-
