@@ -71,70 +71,86 @@
             <div class="product">
                 <img src="img/product1.jpg" alt="25KG BAG">
                 <h3>25KG BAG</h3>
+                <button onclick="showOrderForm('25KG BAG')">Order Now</button>
             </div>
             <div class="product">
                 <img src="img/product2.jpg" alt="50KG BAG">
                 <h3>50KG BAG</h3>
+                <button onclick="showOrderForm('50KG BAG')">Order Now</button>
             </div>
         </div>
-        <div class="order-form">
+        <div class="order-form" id="orderForm" style="display:none;">
             <h2>Order Form</h2>
-            <form id="orderForm">
-                <input type="text" id="name" name="name" placeholder="Your Name" required>
-                <input type="tel" id="phone" name="phone" placeholder="Your Phone Number" required>
-                <select id="product" name="product" required>
-                    <option value="">Select Product</option>
-                    <option value="25KG BAG">25KG BAG</option>
-                    <option value="50KG BAG">50KG BAG</option>
-                </select>
-                <input type="number" id="quantity" name="quantity" placeholder="Quantity" min="1" max="9999" required>
+            <form id="orderFormElement" action="https://script.google.com/macros/s/AKfycbxHNcWgPWwRYihUaLRkqOJ73sCZDrQEqiH5NaaSI6vZrYR7rL3mQT6WMS2Wk1CY3HbrwQ/exec" method="POST">
+                <input type="text" id="name" name="name" placeholder="Your Name" required><br><br>
+                <input type="tel" id="phone" name="phone" placeholder="Your Phone Number" required><br><br>
+                <input type="text" id="product" name="product" placeholder="Product" readonly><br><br>
+                <input type="number" id="quantity" name="quantity" placeholder="Quantity" min="1" max="9999" required><br><br>
                 <button type="submit">Place Order</button>
             </form>
         </div>
+        <div id="orderSlip" style="display:none;">
+            <h2>Order Slip</h2>
+            <div id="slipDetails"></div>
+        </div>
     </div>
     <script>
-        document.getElementById('orderForm').addEventListener('submit', function(event) {
+        let orderNumber = 100000000000;
+
+        function showOrderForm(productName) {
+            document.getElementById('orderForm').style.display = 'block';
+            document.getElementById('product').value = productName;
+        }
+
+        document.getElementById('orderFormElement').addEventListener('submit', function(event) {
             event.preventDefault();
+            
             const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
             const product = document.getElementById('product').value;
             const quantity = document.getElementById('quantity').value;
-            const url = 'https://script.google.com/macros/s/AKfycbyar30DQyAndHYC2ZMNYJb5i3Bn6b4u1mEjKh6JmFwF/exec';
-            const formData = new FormData();
-            formData.append('name', name);
-            formData.append('phone', phone);
-            formData.append('product', product);
-            formData.append('quantity', quantity);
-            
-            fetch(url, { method: 'POST', body: formData })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Success:', data);
-                    const orderNumber = data.orderNumber;
-                    const date = new Date().toLocaleString();
-                    const slip = `
-                        <div style="width: 500px; margin: auto; padding: 20px; text-align: center;">
-                            <div style="position: relative; width: 100%; height: 500px;">
-                                <img src="img/logo.png" alt="Ray Foods Logo" style="width: 100%; height: 100%; opacity: 0.2; position: absolute; top: 0; left: 0; z-index: -1;">
-                                <h1 style="font-size: 50px; color: #333;">Order Slip</h1>
-                                <p style="font-size: 24px; color: #333;">Order Number: ${orderNumber}</p>
-                                <p style="font-size: 24px; color: #333;">Date: ${date}</p>
-                                <p style="font-size: 24px; color: #333;">Name: ${name}</p>
-                                <p style="font-size: 24px; color: #333;">Phone: ${phone}</p>
-                                <p style="font-size: 24px; color: #333;">Product: ${product}</p>
-                                <p style="font-size: 24px; color: #333;">Quantity: ${quantity}</p>
-                            </div>
-                        </div>
-                    `;
-                    const newWindow = window.open('', '', 'width=600,height=400');
-                    newWindow.document.write(slip);
-                    newWindow.document.close();
-                    newWindow.print();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('There was an error submitting your order. Please try again.');
-                });
+
+            // Decrease the order number for each new order
+            orderNumber--;
+
+            // Get the current date and time
+            const now = new Date();
+            const currentDate = now.toLocaleDateString();
+            const currentTime = now.toLocaleTimeString();
+
+            // Generate the order slip details
+            const orderSlipDetails = `
+                Order Number: ${orderNumber}<br>
+                Name: ${name}<br>
+                Product: ${product}<br>
+                Quantity: ${quantity}<br>
+                Date: ${currentDate}<br>
+                Time: ${currentTime}
+            `;
+
+            // Display the order slip
+            document.getElementById('orderSlip').style.display = 'block';
+            document.getElementById('slipDetails').innerHTML = orderSlipDetails;
+
+            // Reset the form and hide it
+            document.getElementById('orderForm').style.display = 'none';
+            document.getElementById('orderFormElement').reset();
+
+            // Send order data to the server (if needed)
+            fetch('https://script.google.com/macros/s/AKfycbxHNcWgPWwRYihUaLRkqOJ73sCZDrQEqiH5NaaSI6vZrYR7rL3mQT6WMS2Wk1CY3HbrwQ/exec', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, product, quantity, orderNumber, currentDate, currentTime })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Order submitted successfully!');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error submitting your order. Please try again.');
+            });
         });
     </script>
 </body>
