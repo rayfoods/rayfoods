@@ -92,29 +92,61 @@
                 <button type="submit">Place Order</button>
             </form>
         </div>
+        <div id="orderSlip" style="display:none;">
+            <h2>Order Slip</h2>
+            <div id="slipDetails"></div>
+        </div>
     </div>
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbxrsJWaajjri_nmFEwbX2WzVh1u9yEr4o9r61u-wsNVPXYNisSAgLifU_yHCsQIrF_K1A/exec';
-        
+
+        let orderNumber = 100000000000;
+
+        function showOrderForm(productName) {
+            document.getElementById('orderForm').style.display = 'block';
+            document.getElementById('product').value = productName;
+        }
+
         document.getElementById('orderFormElement').addEventListener('submit', function(event) {
             event.preventDefault();
-            
+
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
             const product = document.getElementById('product').value;
             const quantity = document.getElementById('quantity').value;
-            const orderNumber = 100000000000 - Math.floor(Math.random() * 100000);
-            const date = new Date().toLocaleString();
 
+            // Decrease the order number for each new order
+            orderNumber--;
+
+            // Get the current date and time
+            const now = new Date();
+            const currentDate = now.toLocaleDateString();
+            const currentTime = now.toLocaleTimeString();
+
+            // Generate the order slip details
             const orderData = {
                 name: name,
                 phone: phone,
                 product: product,
                 quantity: quantity,
                 orderNumber: orderNumber,
-                currentDate: date
+                currentDate: currentDate,
+                currentTime: currentTime
             };
 
+            // Display the order slip
+            const slipDetails = `
+                Order Number: ${orderNumber}<br>
+                Name: ${name}<br>
+                Product: ${product}<br>
+                Quantity: ${quantity}<br>
+                Date: ${currentDate}<br>
+                Time: ${currentTime}
+            `;
+            document.getElementById('orderSlip').style.display = 'block';
+            document.getElementById('slipDetails').innerHTML = slipDetails;
+
+            // Send order data to the server
             fetch(scriptURL, {
                 method: 'POST',
                 headers: {
@@ -135,3 +167,4 @@
     </script>
 </body>
 </html>
+
