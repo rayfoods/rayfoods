@@ -6,33 +6,31 @@ body {
 }
 
 header {
-    background: #333;
-    color: #fff;
-    padding: 10px 0;
+    background: #f4f4f4;
+    padding: 20px;
     text-align: center;
 }
 
-header img {
+header img.logo {
     width: 150px;  /* Adjust the width as needed */
     height: auto;  /* Maintain the aspect ratio */
 }
 
-.container {
-    max-width: 1000px;
-    margin: 20px auto;
+section {
     padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.products {
+.product-container {
     display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap; /* Allows products to wrap to the next line if there's not enough space */
 }
 
 .product {
-    margin: 20px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
     text-align: center;
     width: 200px; /* Adjust width as needed */
 }
@@ -40,34 +38,13 @@ header img {
 .product img {
     max-width: 100%;
     height: auto;
-    border: 1px solid #ddd;
-    padding: 10px;
-    margin-bottom: 10px;
 }
 
-.order-form {
-    margin-top: 30px;
+#orderForm {
     background: #f9f9f9;
     padding: 20px;
     border: 1px solid #ddd;
-}
-
-.order-form input, .order-form select {
-    padding: 10px;
-    margin: 10px 0;
-    width: calc(100% - 22px);
-}
-
-.order-form button {
-    padding: 10px 20px;
-    background-color: #333;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-}
-
-.order-form button:hover {
-    background-color: #555;
+    margin-top: 20px;
 }
 
 #orderSlip {
@@ -80,3 +57,4 @@ header img {
 #slipDetails {
     font-size: 18px;
 }
+
