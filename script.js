@@ -1,4 +1,4 @@
-const scriptURL = 'https://script.google.com/macros/s/AKfycbyar30DQyAndHYC2ZMNYJb5i3Bn6b4u1mEjKh6JmFwF/dev';
+const scriptURL = 'https://script.google.com/macros/s/AKfycbxrsJWaajjri_nmFEwbX2WzVh1u9yEr4o9r61u-wsNVPXYNisSAgLifU_yHCsQIrF_K1A/exec';
 
 let orderNumber = 100000000000;
 
@@ -14,61 +14,45 @@ document.getElementById('orderFormElement').addEventListener('submit', function(
     const phone = document.getElementById('phone').value;
     const product = document.getElementById('product').value;
     const quantity = document.getElementById('quantity').value;
-
+    
+    // Decrease the order number for each new order
     orderNumber--;
-
+    
+    // Get the current date and time
     const now = new Date();
     const currentDate = now.toLocaleDateString();
     const currentTime = now.toLocaleTimeString();
-
-    const orderSlipDetails = `
-        Order Number: ${orderNumber}\n
-        Name: ${name}\n
-        Product: ${product}\n
-        Quantity: ${quantity}\n
-        Date: ${currentDate}\n
-        Time: ${currentTime}
-    `;
-
-    document.getElementById('orderSlip').style.display = 'block';
-    document.getElementById('slipDetails').innerHTML = orderSlipDetails.replace(/\n/g, '<br>');
-
-    const logoImage = new Image();
-    logoImage.src = 'images/logo.png';
-    logoImage.onload = function() {
-        const { jsPDF } = window.jspdf;
-
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = logoImage.width;
-        canvas.height = logoImage.height;
-
-        ctx.globalAlpha = 0.2;
-        ctx.drawImage(logoImage, 0, 0, logoImage.width, logoImage.height);
-
-        const imgData = canvas.toDataURL('image/png');
-
-        const doc = new jsPDF({
-            orientation: 'portrait',
-            unit: 'px',
-            format: [logoImage.width, logoImage.height]
-        });
-
-        doc.addImage(imgData, 'PNG', 0, 0, logoImage.width, logoImage.height);
-        doc.setFontSize(74);
-        doc.setTextColor(0, 0, 0);
-        const lines = doc.splitTextToSize(orderSlipDetails, logoImage.width - 40);
-        doc.text(lines, 20, 60);
-
-        doc.save(`OrderSlip_${orderNumber}.pdf`);
+    
+    // Generate the order slip details
+    const orderData = {
+        name: name,
+        phone: phone,
+        product: product,
+        quantity: quantity,
+        orderNumber: orderNumber,
+        currentDate: currentDate,
+        currentTime: currentTime
     };
 
+    // Display the order slip
+    const slipDetails = `
+        Order Number: ${orderNumber}<br>
+        Name: ${name}<br>
+        Product: ${product}<br>
+        Quantity: ${quantity}<br>
+        Date: ${currentDate}<br>
+        Time: ${currentTime}
+    `;
+    document.getElementById('orderSlip').style.display = 'block';
+    document.getElementById('slipDetails').innerHTML = slipDetails;
+
+    // Send order data to the server
     fetch(scriptURL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ name, phone, product, quantity, orderNumber, currentDate, currentTime })
+        body: JSON.stringify(orderData)
     })
     .then(response => {
         if (response.ok) {
@@ -80,3 +64,4 @@ document.getElementById('orderFormElement').addEventListener('submit', function(
     })
     .catch(error => alert('There was an error submitting your order. Please try again.'));
 });
+
