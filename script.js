@@ -181,14 +181,13 @@
 
             // Send order data to Google Sheets
             try {
-                const response = await fetch('https://script.google.com/macros/s/AKfycbxssIcqhmPWFSYZky3jKNvwwKZTo46AdXb1neaeHqktcJfbOWoFPQIn8C4DjX8V5azK6g/exec', {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbxORxNRtVq4W5K2K83xbSCBW0waj0LRM0eaDYJVJ2ceENl7nHfxqHxVxT5KgcQR0z2vIg/exec', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ name, phone, product, quantity, orderNumber, currentDate, currentTime })
                 });
-
                 const result = await response.json();
                 if (result.result === 'success') {
                     alert('Order submitted successfully!');
@@ -197,10 +196,12 @@
                     alert('There was an error submitting your order. Please try again.');
                 }
             } catch (error) {
+                console.error('Error:', error);
                 alert('There was an error submitting your order. Please try again.');
             }
         });
     </script>
 </body>
 </html>
+
 
