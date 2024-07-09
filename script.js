@@ -9,73 +9,71 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            text-align: center;
-            background-color: #f4f4f4;
+            box-sizing: border-box;
         }
+
         header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 0;
-        }
-        header img {
-            width: 150px;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 20px auto;
+            background: #f4f4f4;
             padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .products {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-        }
-        .product {
-            margin: 20px;
             text-align: center;
         }
-        .product img {
-            width: 200px;
+
+        header img.logo {
+            width: 150px;
             height: auto;
         }
-        .order-form {
-            margin-top: 30px;
+
+        section {
+            padding: 20px;
         }
-        .order-form input, .order-form select {
-            padding: 10px;
-            margin: 10px 0;
-            width: calc(100% - 22px);
+
+        .product-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
         }
-        .order-form button {
-            padding: 10px 20px;
-            background-color: #333;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-        }
-        .order-form button:hover {
-            background-color: #555;
-        }
-        #orderSlip {
-            display: none;
-            margin-top: 20px;
-            text-align: left;
-            padding: 10px;
+
+        .product {
             border: 1px solid #ddd;
-            background-color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            text-align: center;
+            width: 200px;
+        }
+
+        .product img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        #orderForm {
+            background: #f9f9f9;
+            padding: 20px;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+        }
+
+        #orderSlip {
+            background: #f9f9f9;
+            padding: 20px;
+            border: 1px solid #ddd;
+            margin-top: 20px;
+        }
+
+        #slipDetails {
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
     <header>
-        <img src="img/logo.png" alt="Ray Foods Logo">
+        <img src="img/logo.png" alt="Ray Foods Logo" class="logo">
     </header>
-    <div class="container">
+    <section>
         <h1>Welcome to Ray Foods</h1>
         <p>Quality cattle food for your farm.</p>
-        <div class="products">
+        <div class="product-container">
             <div class="product">
                 <img src="img/product1.jpg" alt="25KG BAG">
                 <h3>25KG BAG</h3>
@@ -87,7 +85,7 @@
                 <button onclick="showOrderForm('50KG BAG')">Order Now</button>
             </div>
         </div>
-        <div class="order-form" id="orderForm">
+        <div id="orderForm" style="display: none;">
             <h2>Order Form</h2>
             <form id="orderFormElement">
                 <input type="text" id="name" name="name" placeholder="Your Name" required>
@@ -97,11 +95,11 @@
                 <button type="submit">Place Order</button>
             </form>
         </div>
-        <div id="orderSlip">
+        <div id="orderSlip" style="display: none;">
             <h2>Order Slip</h2>
             <div id="slipDetails"></div>
         </div>
-    </div>
+    </section>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
     <script>
         let orderNumber = 100000000000;
@@ -183,7 +181,7 @@
 
             // Send order data to Google Sheets
             try {
-                const response = await fetch('https://script.google.com/macros/s/AKfycbxrsJWaajjri_nmFEwbX2WzVh1u9yEr4o9r61u-wsNVPXYNisSAgLifU_yHCsQIrF_K1A/exec', {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbxssIcqhmPWFSYZky3jKNvwwKZTo46AdXb1neaeHqktcJfbOWoFPQIn8C4DjX8V5azK6g/exec', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -205,3 +203,4 @@
     </script>
 </body>
 </html>
+
