@@ -9,7 +9,6 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
             text-align: center;
             background-color: #f4f4f4;
         }
@@ -59,15 +58,6 @@
         .order-form button:hover {
             background-color: #555;
         }
-        #orderSlip {
-            background: #f9f9f9;
-            padding: 20px;
-            border: 1px solid #ddd;
-            margin-top: 20px;
-        }
-        #slipDetails {
-            font-size: 18px;
-        }
     </style>
 </head>
 <body>
@@ -89,7 +79,7 @@
         </div>
         <div class="order-form">
             <h2>Order Form</h2>
-            <form id="orderFormElement">
+            <form id="orderForm">
                 <input type="text" id="name" name="name" placeholder="Your Name" required>
                 <input type="tel" id="phone" name="phone" placeholder="Your Phone Number" required>
                 <select id="product" name="product" required>
@@ -101,78 +91,34 @@
                 <button type="submit">Place Order</button>
             </form>
         </div>
-        <div id="orderSlip" style="display:none;">
-            <h2>Order Slip</h2>
-            <div id="slipDetails"></div>
-        </div>
     </div>
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbyX0b4CREGl24PGEy-DkcdfqreDHEUIyvIt4lotwkY8yfsb_MXvhHZLclhIBn0fIavURw/exec';
-
-        let orderNumber = 100000000000;
-
-        function showOrderForm(productName) {
-            document.getElementById('orderForm').style.display = 'block';
-            document.getElementById('product').value = productName;
-        }
-
-        document.getElementById('orderFormElement').addEventListener('submit', function(event) {
+        document.getElementById('orderForm').addEventListener('submit', function(event) {
             event.preventDefault();
-
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
             const product = document.getElementById('product').value;
             const quantity = document.getElementById('quantity').value;
-
-            // Decrease the order number for each new order
-            orderNumber--;
-
-            // Get the current date and time
-            const now = new Date();
-            const currentDate = now.toLocaleDateString();
-            const currentTime = now.toLocaleTimeString();
-
-            // Generate the order slip details
-            const orderData = {
-                name: name,
-                phone: phone,
-                product: product,
-                quantity: quantity,
-                orderNumber: orderNumber,
-                currentDate: currentDate,
-                currentTime: currentTime
-            };
-
-            // Display the order slip
-            const slipDetails = `
-                Order Number: ${orderNumber}<br>
-                Name: ${name}<br>
-                Phone: ${phone}<br>
-                Product: ${product}<br>
-                Quantity: ${quantity}<br>
-                Date: ${currentDate}<br>
-                Time: ${currentTime}
+            const orderNumber = 100000000000 - Math.floor(Math.random() * 100000);
+            const date = new Date().toLocaleString();
+            const slip = `
+                <div style="width: 500px; margin: auto; padding: 20px; text-align: center;">
+                    <div style="position: relative; width: 100%; height: 500px;">
+                        <img src="img/logo.png" alt="Ray Foods Logo" style="width: 100%; height: 100%; opacity: 0.2; position: absolute; top: 0; left: 0; z-index: -1;">
+                        <h1 style="font-size: 50px; color: #333;">Order Slip</h1>
+                        <p style="font-size: 24px; color: #333;">Order Number: ${orderNumber}</p>
+                        <p style="font-size: 24px; color: #333;">Date: ${date}</p>
+                        <p style="font-size: 24px; color: #333;">Name: ${name}</p>
+                        <p style="font-size: 24px; color: #333;">Phone: ${phone}</p>
+                        <p style="font-size: 24px; color: #333;">Product: ${product}</p>
+                        <p style="font-size: 24px; color: #333;">Quantity: ${quantity}</p>
+                    </div>
+                </div>
             `;
-            document.getElementById('orderSlip').style.display = 'block';
-            document.getElementById('slipDetails').innerHTML = slipDetails;
-
-            // Send order data to the server
-            fetch(scriptURL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(orderData)
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('Order submitted successfully!');
-                    document.getElementById('orderFormElement').reset();
-                } else {
-                    throw new Error('Network response was not ok');
-                }
-            })
-            .catch(error => alert('There was an error submitting your order. Please try again.'));
+            const newWindow = window.open('', '', 'width=600,height=400');
+            newWindow.document.write(slip);
+            newWindow.document.close();
+            newWindow.print();
         });
     </script>
 </body>
