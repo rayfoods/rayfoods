@@ -108,7 +108,8 @@
             storageBucket: "rayfoodsorders.appspot.com",
             messagingSenderId: "372992480542",
             appId: "1:372992480542:web:335e9f2c5fa0fd04f8a50f",
-            measurementId: "G-2EP1CX8717"
+            measurementId: "G-2EP1CX8717",
+            databaseURL: "https://rayfoodsorders-default-rtdb.firebaseio.com/"
         };
 
         firebase.initializeApp(firebaseConfig);
