@@ -101,6 +101,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
     <script>
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBMoiFP-9cX_fvxqTch9HQ99DQHmnwevoQ",
             authDomain: "rayfoodsorders.firebaseapp.com",
@@ -108,9 +109,11 @@
             storageBucket: "rayfoodsorders.appspot.com",
             messagingSenderId: "372992480542",
             appId: "1:372992480542:web:335e9f2c5fa0fd04f8a50f",
-            measurementId: "G-2EP1CX8717"
+            measurementId: "G-2EP1CX8717",
+            databaseURL: "https://rayfoodsorders-default-rtdb.firebaseio.com/"
         };
 
+        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
@@ -144,7 +147,7 @@
                 currentTime
             };
 
-            firebase.database().ref('orders/' + orderNumber).set(orderData)
+            database.ref('orders/' + orderNumber).set(orderData)
             .then(() => {
                 alert('Order submitted successfully!');
                 document.getElementById('orderForm').style.display = 'none';
