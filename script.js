@@ -7,7 +7,7 @@ function showOrderForm(productName) {
 
 document.getElementById('orderFormElement').addEventListener('submit', function(event) {
     event.preventDefault();
-
+    
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
     const product = document.getElementById('product').value;
@@ -23,19 +23,30 @@ document.getElementById('orderFormElement').addEventListener('submit', function(
 
     // Generate the order slip details
     const orderSlipDetails = `
-        Order Number: ${orderNumber}<br>
-        Name: ${name}<br>
-        Phone: ${phone}<br>
-        Product: ${product}<br>
-        Quantity: ${quantity}<br>
-        Date: ${currentDate}<br>
+        Order Number: ${orderNumber}\n
+        Name: ${name}\n
+        Product: ${product}\n
+        Quantity: ${quantity}\n
+        Date: ${currentDate}\n
         Time: ${currentTime}
     `;
 
     // Display the order slip
     document.getElementById('orderSlip').style.display = 'block';
-    document.getElementById('slipDetails').innerHTML = orderSlipDetails;
+    document.getElementById('slipDetails').innerHTML = orderSlipDetails.replace(/\n/g, '<br>');
 
-    // Hide the order form after submission
-    document.getElementById('orderForm').style.display = 'none';
+    // Send order data to the server (if needed)
+    fetch('order.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, phone, product, quantity, orderNumber, currentDate, currentTime })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('Order submitted successfully!');
+        document.getElementById('orderForm').style.display = 'none';
+    })
+    .catch(error => console.error('Error:', error));
 });
