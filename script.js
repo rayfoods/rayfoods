@@ -1,3 +1,17 @@
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyDuRSgzMgCuf3kGPwwzyVQGyLqQ3bVSi8A",
+    authDomain: "rayfood-60514.firebaseapp.com",
+    projectId: "rayfood-60514",
+    storageBucket: "rayfood-60514.appspot.com",
+    messagingSenderId: "301733056070",
+    appId: "1:301733056070:web:75bf3134524f4ae1478447",
+    measurementId: "G-JKK282PCRY"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
 let orderNumber = 100000000000;
 
 function showOrderForm(productName) {
@@ -7,7 +21,7 @@ function showOrderForm(productName) {
 
 document.getElementById('orderFormElement').addEventListener('submit', function(event) {
     event.preventDefault();
-    
+
     const name = document.getElementById('name').value;
     const product = document.getElementById('product').value;
     const quantity = document.getElementById('quantity').value;
@@ -70,21 +84,23 @@ document.getElementById('orderFormElement').addEventListener('submit', function(
         doc.text(lines, 20, 60); // Adjust the position as needed
 
         // Save the PDF
-        doc.save(OrderSlip_${orderNumber}.pdf);
+        doc.save(`OrderSlip_${orderNumber}.pdf`);
     };
 
-    // Send order data to the server (if needed)
-    fetch('order.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ name, product, quantity, orderNumber, currentDate, currentTime })
+    // Save order to Firestore
+    db.collection('orders').add({
+        name: name,
+        product: product,
+        quantity: quantity,
+        orderNumber: orderNumber,
+        date: currentDate,
+        time: currentTime
     })
-    .then(response => response.json())
-    .then(data => {
+    .then(function() {
         alert('Order submitted successfully!');
         document.getElementById('orderForm').style.display = 'none';
     })
-    .catch(error => console.error('Error:', error));
+    .catch(function(error) {
+        console.error('Error adding order: ', error);
+    });
 });
